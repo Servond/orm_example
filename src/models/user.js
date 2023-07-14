@@ -10,15 +10,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.Branch, { foreignKey: "branchId"})
     }
   }
   User.init({
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
+    userName: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    branchId: DataTypes.INTEGER
+    branchId: DataTypes.INTEGER,
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'User',

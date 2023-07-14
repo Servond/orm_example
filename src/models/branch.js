@@ -14,5 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
+  Branches.associate = (models) => {
+    Branches.hasMany(models.User, { foreignKey: "branchId" })
+  }
+
   return Branches;
 };

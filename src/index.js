@@ -7,17 +7,20 @@ const express = require("express");
 const db = require("./models");
 const app = express();
 
-const { branchRoutes } = require("./routes");
+const { branchRoutes, authRoutes } = require("./routes");
+const { verifyToken, checkRole } = require("./middleware/auth");
 
 app.use(express.json());
 
-app.use("/branch-management", branchRoutes)
+app.use("/branch-management", verifyToken, checkRole, branchRoutes);
+app.use("/auth", authRoutes);
+
 
 // const db = require("./models");
 // const user = db.Users;
 // const branch = db.Branch;
 
-// db.sequelize.sync({ alter: true });
+db.sequelize.sync({ alter: true });
 
 // const createBranch = async () => {
 //   const result = await branch.create({

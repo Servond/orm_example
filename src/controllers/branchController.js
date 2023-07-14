@@ -1,6 +1,7 @@
 const db = require("../models");
 const branch = db.Branch;
-// const sequelize = db.Sequelize;
+const user = db.User;
+const sequelize = db.Sequelize;
 const { Op } = sequelize;
 
 const BranchController = {
@@ -10,16 +11,35 @@ const BranchController = {
             const { id } = req.params;
 
             // select * from branch where id = id
+
+            // select * 
+            	// from branches
+                // left join users on users.branchId = branches.id
+                // where branches.id = 1;
             const result = await branch.findOne({
                 where: {
                     id
-                }
+                },
+                // eager loading
+                include: [
+                    {
+                        model: user,
+                    },
+                ]
             });
+
+            // lazy loading
+            // const userData = await result.getUsers({
+            //     where: {
+            //         id: 1
+            //     }
+            // }); 
+            // const data = await userData.getCategory()
 
             //return function if successs
             return res.status(200).json({
                 message: "Get data success",
-                data: result
+                data: userData
             })
         } catch (err) {
             // return function if fail or error
@@ -70,11 +90,11 @@ const BranchController = {
         try {
             const { branchName, address } = req.body;
             
-            await db.sequelize.transaction( async (t) => {
+            await db.sequelize.transaction( async (a) => {
                 const result = await branch.create({
                     branchName,
                     address
-                }, { transaction: t });
+                }, { transaction: a });
 
                 return res.status(200).json({
                 message: "Create data success",
